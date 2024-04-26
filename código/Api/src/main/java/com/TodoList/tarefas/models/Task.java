@@ -8,8 +8,11 @@ import lombok.ToString;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import com.TodoList.tarefas.enums.prioridadeEnum;
+import com.TodoList.tarefas.enums.statusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -36,14 +39,32 @@ public class Task {
     private String descricao;
 
     @Column(nullable = false)
-    private Date data_inicio;
+    private LocalDate data_fim;
 
-    @Column(nullable = false)
-    private Date data_fim;
+    @Column(name = "completo")
+    private boolean completo = false;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    private LocalDate createdAt;
+
+    @Column(name = "Status")
+    @Enumerated(EnumType.ORDINAL)
+    private statusEnum status;
+
+    @Column(name = "isTaskLivre")
+    private boolean isTaskLivre;
+
+    @Column(name = "prazo")
+    private int prazo;
+
+    @Column(name = "prioridade")
+    @Enumerated(EnumType.ORDINAL)
+    private prioridadeEnum prioridade;
+
+    public boolean getCompleto(){
+        return completo;
+    }
 
 }
 
