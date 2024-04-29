@@ -1,6 +1,14 @@
 package com.TodoList.tarefas.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.Arrays;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 
 public enum prioridadeEnum {
     ALTA (1, "Prioridade alta"),
@@ -9,11 +17,6 @@ public enum prioridadeEnum {
 
     private int id;
     private String descricao;
-
-    prioridadeEnum(int id, String descricao){
-        this.id = id;
-        this.descricao = descricao;
-    }
 
     public static prioridadeEnum getStatusById(int id){
         return Arrays.stream(values()).filter(x->x.id == id).findFirst().orElse(null);

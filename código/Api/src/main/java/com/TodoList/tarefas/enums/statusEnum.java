@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 @Getter
 public enum statusEnum {
-    BACKLOG (1, "Em backlog"),
+    TAREFA (1, "Tarefa"),
     INICIALIZADA (2, "Inicializada"),
     FINALIZADA (3, "Finalizada");
 

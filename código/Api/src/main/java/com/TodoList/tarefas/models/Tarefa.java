@@ -13,10 +13,9 @@ import com.TodoList.tarefas.enums.statusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
-@Table(name = "tasks")
+@Table(name = "tarefas")
 @Setter
 @Getter
 @ToString
@@ -24,7 +23,7 @@ import java.util.Date;
 @AllArgsConstructor
 
 @Schema(description = "Todos os detalhes sobre uma tarefa. ")
-public class Task {
+public class Tarefa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +52,7 @@ public class Task {
     private statusEnum status;
 
     @Column(name = "isTaskLivre")
-    private boolean isTaskLivre;
+    private boolean isTarefaLivre;
 
     @Column(name = "prazo")
     private int prazo;
