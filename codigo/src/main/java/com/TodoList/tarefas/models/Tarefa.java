@@ -61,9 +61,21 @@ public class Tarefa {
     @Enumerated(EnumType.ORDINAL)
     private prioridadeEnum prioridade;
 
+    public Tarefa(String titulo, String descricao, LocalDate data_fim, boolean completo, statusEnum status, boolean isTarefaLivre, int prazo, prioridadeEnum prioridade) {
+        this.titulo = titulo;
+        this.descricao = descricao;
+        this.data_fim = data_fim;
+        this.completo = completo;
+        this.status = status;
+        this.isTarefaLivre = isTarefaLivre;
+        this.prazo = prazo;
+        this.prioridade = prioridade;
+    }
+
     public boolean getCompleto(){
         return completo;
     }
+
 
 }
 
