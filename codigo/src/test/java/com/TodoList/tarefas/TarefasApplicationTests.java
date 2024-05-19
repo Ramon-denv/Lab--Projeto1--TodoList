@@ -63,7 +63,7 @@ public class TarefasApplicationTests {
 
 	@Test
 	void testeCreateTodoSucesso() {
-		var todo = new Tarefa("todo 1", "todo lista", LocalDate.of(2024, 5, 19), false, TAREFA, false, 1, BAIXA);
+		var todo = new Tarefa("todo 1", "todo lista", false, TAREFA, false, 1, BAIXA);
 
 		webTestClient
 				.post()
@@ -74,7 +74,6 @@ public class TarefasApplicationTests {
 				.expectBody()
 				.jsonPath("$.titulo").isEqualTo(todo.getTitulo())
 				.jsonPath("$.descricao").isEqualTo(todo.getDescricao())
-				.jsonPath("$.data_fim").isEqualTo(todo.getData_fim().toString())
 				.jsonPath("$.completo").isEqualTo(todo.getCompleto())
 				.jsonPath("$.prioridade").isEqualTo(todo.getPrioridade().toString())
 				.jsonPath("$.status").isEqualTo(todo.getStatus().toString());
@@ -82,7 +81,7 @@ public class TarefasApplicationTests {
 
 	@Test
 	void testeUpdateTodoSucesso() {
-		var updatedTodo = new Tarefa("updated todo", "updated description", LocalDate.of(2024, 5, 19), true, TAREFA, false, 1, BAIXA);
+		var updatedTodo = new Tarefa("updated todo", "updated description", true, TAREFA, false, 1, BAIXA);
 
 		webTestClient
 				.put()
@@ -93,7 +92,6 @@ public class TarefasApplicationTests {
 				.expectBody()
 				.jsonPath("$.titulo").isEqualTo(updatedTodo.getTitulo())
 				.jsonPath("$.descricao").isEqualTo(updatedTodo.getDescricao())
-				.jsonPath("$.data_fim").isEqualTo(updatedTodo.getData_fim().toString()) // Ajuste aqui, se necessário, para o formato de data
 				.jsonPath("$.completo").isEqualTo(updatedTodo.getCompleto())
 				.jsonPath("$.prioridade").isEqualTo(updatedTodo.getPrioridade().toString()) // Considerando que é um enum
 				.jsonPath("$.status").isEqualTo(updatedTodo.getStatus().toString()); // Considerando que é um enum
