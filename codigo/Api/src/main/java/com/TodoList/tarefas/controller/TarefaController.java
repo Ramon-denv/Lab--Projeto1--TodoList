@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TarefaController {
 
     @Autowired
@@ -117,8 +118,4 @@ public class TarefaController {
     public ResponseEntity<Tarefa> alterarPrioridade(@PathVariable long id, @PathVariable int value){
         return tarefa_servico.alterarPrioridade(id, prioridadeEnum.getStatusById(value));
     }
-
-
-
-
 }
