@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3001")
 public class TarefaController {
 
     @Autowired
