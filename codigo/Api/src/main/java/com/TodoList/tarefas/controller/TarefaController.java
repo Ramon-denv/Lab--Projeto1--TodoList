@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin
 public class TarefaController {
 
     @Autowired
@@ -111,8 +111,8 @@ public class TarefaController {
         return tarefa_servico.deleteTarefaById(id);
     }
     @PatchMapping("/v1/status/{id}/{status}")
-    public ResponseEntity<Tarefa> setStatus(@PathVariable long id,  @PathVariable int value){
-        return tarefa_servico.setStatus(id, statusEnum.getStatusById(value));
+    public ResponseEntity<Tarefa> setStatus(@PathVariable long id,  @PathVariable int status){
+        return tarefa_servico.setStatus(id, statusEnum.getStatusById(status));
     }
     @PatchMapping("/v1/prioridade/{id}/{status}")
     public ResponseEntity<Tarefa> alterarPrioridade(@PathVariable long id, @PathVariable int value){

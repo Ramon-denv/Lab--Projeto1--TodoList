@@ -36,7 +36,6 @@ export const TodoForm = ({ open, onClose, onSubmit }: TodoFormProps) => {
     };
 
     const handleClose = () => {
-        // Limpa os campos ao fechar o modal
         setTitulo("");
         setDescricao("");
         setCompleto(false);

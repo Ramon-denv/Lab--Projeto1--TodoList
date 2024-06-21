@@ -3,10 +3,14 @@ export interface ITodo {
     titulo: string;
     descricao: string;
     completo: boolean;
+    createdAt : Date;
+    dataFim : Date;
     prazo: number;
     tarefaLivre?: boolean;
-    status: StatusEnum;
-    prioridade?: PrioridadeEnum;
+    status : string;
+    prioridade : string;
+    tipoTarefa : string;
+    taskLivre : boolean;
 }
 
 export enum PrioridadeEnum {
