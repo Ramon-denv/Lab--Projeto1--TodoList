@@ -13,12 +13,6 @@ export interface ITodo {
     taskLivre : boolean;
 }
 
-export enum PrioridadeEnum {
-    ALTA = 'ALTA',
-    MEDIA = 'MEDIA',
-    BAIXA = 'BAIXA',
-}
-
 export enum StatusEnum {
     TAREFA = 'TAREFA',
     INICIALIZADA = 'INICIALIZADA',

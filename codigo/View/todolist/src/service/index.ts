@@ -7,28 +7,25 @@ function setHttpServer(): AxiosInstance {
     });
 }
 
-export const getTodo = async (): Promise<ITodo[]> => {
-    const response = await setHttpServer().get("/tarefas/v1");
-    return response.data;
+export const getTasks = async (): Promise<ITodo[]> => {
+    
+    const { data } = await setHttpServer().get(`/tarefas/v1`);
+    return data;
 };
 
-export const AddTodo = async (formData: ITodo): Promise<void> => {
-    try {
-        debugger
-        const url = `/tarefas/v1`;
-        const response = await setHttpServer().post(url, formData);
-        if (response.status === 200) {
-            console.log("Tarefa salva com sucesso!");
-            window.location.reload();
-        } else {
-            console.error("Erro ao salvar tarefa:", response.statusText);
-        }
-    } catch (error) {
-        console.error("Erro ao salvar tarefa:", error);
-        throw error;
-    }
-};
+export const getTasksByStatus = async (status: string): Promise<ITodo[]> => {
 
+    const { data } = await setHttpServer().get(`/tarefas/v1/status/${status}`);
+    return data;
+};
+export const postTask = async (
+    task : any
+): Promise<any> => {
+    const { data } = await setHttpServer().post(
+        `/tarefas/v1`, task
+    );
+    return data;
+}
 export const onAdvanceTask = async (
     id : number,
     status : number
@@ -55,18 +52,11 @@ export const editTodo = async (id: number, formData: ITodo): Promise<void> => {
     }
 };
 
-export const deleteTodo = async (id: number): Promise<void> => {
-    try {
-        const url = `/tarefas/v1/${id}`;
-        const response = await setHttpServer().delete(url);
-        if (response.status === 200) {
-            console.log("Tarefa deletada com sucesso!");
-            window.location.reload();
-        } else {
-            console.error("Erro ao deletar tarefa:", response.statusText);
-        }
-    } catch (error) {
-        console.error("Erro ao deletar tarefa:", error);
-        throw error;
+export const deleteTasks = async (id : number): Promise<boolean> => {
+    try{
+        const { data } = await setHttpServer().delete(`/tarefas/v1/${id}`);
+        return data;
+    }catch (e) {
+        return e.response.data;
     }
 };

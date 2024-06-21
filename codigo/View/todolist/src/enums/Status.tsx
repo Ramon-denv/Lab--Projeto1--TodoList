@@ -1,5 +1,5 @@
 export const Status = {
-    TARERFA :'TAREFA',
+    TAREFA :'TAREFA',
     INICIALIZADA : 'INICIALIZADA',
     FINALIZADA : 'FINALIZADA'
 };

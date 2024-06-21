@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import Home from "../src/views/TodoWrapper";
+import Home from "../src/views/TodoWrapper.tsx";
 
 export function App() {
     return (

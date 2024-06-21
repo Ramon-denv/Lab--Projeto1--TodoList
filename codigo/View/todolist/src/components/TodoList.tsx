@@ -1,75 +1,85 @@
-import React from 'react';
-import { ITodo } from "../service/entities/todo";
-import { Card, CardContent, Typography, Grid, IconButton, Box, Checkbox } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import React from "react";
+import { Card, CardContent, Typography, IconButton, Box } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { tipoTarefa } from "../enums/tipoTarefa.tsx";
 
-interface TodoListProps {
-    todo: ITodo;
-    onEdit: (todo: ITodo) => void;
-    onDelete: (id: number) => void;
-    onStatusChange: (todo: ITodo) => void;  // Adicionado aqui
-}
-
-export const TodoList = ({ todo, onEdit, onDelete, onStatusChange }: TodoListProps) => {
-    if (!todo) {
-        return null;
+const TodoList = ({ tasks, onEdit, onDelete }) => {
+  const getBorderColor = (priority) => {
+    switch (priority) {
+      case "ALTA":
+        return "red";
+      case "MEDIA":
+        return "orange";
+      case "BAIXA":
+        return "green";
+      default:
+        return "gray";
     }
+  };
 
-    const handleDeleteClick = () => {
-        onDelete(todo.id);
-    };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
 
-    const handleEditClick = () => {
-        onEdit(todo);
-    };
+  const calculateDaysRemaining = (dateString) => {
+    const currentDate = new Date();
+    const targetDate = new Date(dateString);
+    const differenceInMillis = targetDate.getTime() - currentDate.getTime();
+    return Math.ceil(differenceInMillis / (1000 * 60 * 60 * 24));
+  };
 
-    const handleStatusChange = () => {
-        onStatusChange(todo);
-    };
+  const setColorDate = (dateString) => {
+    return calculateDaysRemaining(dateString) <= 2 ? "red" : "inherit";
+  };
 
-    const getBorderColor = () => {
-        switch (todo.prioridade) {
-            case "ALTA":
-                return "red";
-            case "MEDIA":
-                return "orange";
-            case "BAIXA":
-                return "green";
-            default:
-                return "gray";
-        }
-    };
-
-    return (
-        <Card sx={{ boxShadow: 0, width: '310px', borderRadius: '25px', border: `3px solid ${getBorderColor()}`, mb: 2, p: 2 }}>
-            <CardContent sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1 }}>
-                <Checkbox
-                    checked={todo.status === "FINALIZADA"}
-                    indeterminate={todo.status === "INICIALIZADA"}
-                    onChange={handleStatusChange}
-                />
-                <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-                    <Typography variant="body2" fontWeight={500} sx={{ fontFamily: 'Arial' }}>
-                        {todo.titulo}
-                    </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-                    <Typography variant="body2" fontWeight={500} sx={{ fontFamily: 'Arial' }}>
-                        {todo.prazo}
-                    </Typography>
-                </Box>
-                <Box>
-                    <IconButton onClick={handleEditClick} aria-label="Editar">
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={handleDeleteClick} aria-label="Excluir">
-                        <DeleteIcon />
-                    </IconButton>
-                </Box>
-            </CardContent>
+  return (
+    <>
+      {tasks.map((todo) => (
+        <Card
+          key={todo.id}
+          sx={{
+            boxShadow: 0,
+            width: '310px',
+            borderRadius: '25px',
+            border: `3px solid ${getBorderColor(todo.prioridade)}`,
+            mb: 2,
+            p: 2
+          }}
+          onClick={() => onEdit(todo)}
+        >
+          <CardContent
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1 }}
+          >
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography variant="body2" fontWeight={500}>
+                {todo.titulo}
+              </Typography>
+              <Typography variant="body2" fontWeight={500}>
+                {todo.prazo}
+              </Typography>
+              <Typography variant="body2" fontWeight={500}>
+                {todo.prioridade}
+              </Typography>
+              <Typography variant="body2" fontWeight={500}>
+                {todo.tipoTarefa === tipoTarefa.DIAS && (
+                  <span style={{ color: setColorDate(todo.dataFim) }}>
+                    {calculateDaysRemaining(todo.dataFim)} dias
+                  </span>
+                )}
+              </Typography>
+              <Typography variant="body2" fontWeight={500}>
+                {todo.descricao}
+              </Typography>
+            </Box>
+            <IconButton onClick={(e) => { e.stopPropagation(); onDelete(todo.id); }}>
+              <DeleteIcon />
+            </IconButton>
+          </CardContent>
         </Card>
-    );
+      ))}
+    </>
+  );
 };
 
 export default TodoList;

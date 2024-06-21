@@ -1,118 +1,147 @@
-import React, { useState } from 'react';
-import { Select, MenuItem, InputLabel, FormControl,Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from "@mui/material";
-import { Icon } from "@iconify/react";
-import { PrioridadeEnum, StatusEnum } from "../service/entities/todo";
+import React, { useState, useEffect } from 'react';
+import { FaCheckCircle, FaTimes } from "react-icons/fa";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from "@mui/material";
+import { postTask } from '../service/index.ts';
+import { tipoTarefa } from '../enums/tipoTarefa.tsx';
 
-interface TodoFormProps {
-    open: boolean;
-    onClose: () => void;
-    onSubmit: (formData: any) => void;
-}
+const TodoForm = ({ open, onClose, onSubmit }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [taskType, setTaskType] = useState(tipoTarefa.DATA);
+  const [endDate, setEndDate] = useState("");
+  const [days, setDays] = useState("");
+  const [priority, setPriority] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
 
-export const TodoForm = ({ open, onClose, onSubmit }: TodoFormProps) => {
-    const [titulo, setTitulo] = useState('');
-    const [descricao, setDescricao] = useState('');
-    const [completo, setCompleto] = useState(false);
-    const [prazo, setPrazo] = useState<number>(0);
-    const [tarefaLivre, setTarefaLivre] = useState(false);
-    const [status, setStatus] = useState<StatusEnum>(StatusEnum.TAREFA);
-    const [prioridade, setPrioridade] = useState<PrioridadeEnum>(PrioridadeEnum.BAIXA);
+  useEffect(() => {
+    if (!open) {
+      setTitle("");
+      setDescription("");
+      setTaskType(tipoTarefa.DATA);
+      setEndDate("");
+      setDays("");
+      setPriority("");
+    }
+  }, [open]);
 
-    const handleSubmit = async () => {
-        try {
-            const formData = {
-                titulo: titulo,
-                descricao: descricao,
-                completo: completo,
-                prazo: prazo,
-                tarefaLivre: tarefaLivre,
-                status: status,
-                prioridade: prioridade,
-            };
-            onSubmit(formData);
-        } catch (error) {
-            console.error("Erro ao cadastrar tarefa:", error);
-        }
-    };
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    try {
+      const data = {
+        titulo: title,
+        description: description,
+        complete: false,
+        createdAt: new Date().toISOString(),
+        dataFim: taskType === tipoTarefa.DATA ? endDate : null,
+        status: 0,
+        taskLivre: taskType === tipoTarefa.LIVRE,
+        prazo: taskType === tipoTarefa.DIAS ? parseInt(days) : null,
+        prioridade: priority,
+        tipoTarefa: taskType,
+      };
 
-    const handleClose = () => {
-        setTitulo("");
-        setDescricao("");
-        setCompleto(false);
-        setPrazo(0);
-        setTarefaLivre(false);
-        setStatus(StatusEnum.TAREFA);
-        setPrioridade(PrioridadeEnum.BAIXA);
-
+      const response = await postTask(data);
+      if (response.id > 0) {
+        setShowSuccessMessage(true);
+      } else {
+        throw new Error("Erro ao salvar a tarefa");
+      }
+    } catch (error) {
+      setShowErrorMessage(true);
+    } finally {
+      setTimeout(() => {
+        setShowSuccessMessage(false);
         onClose();
-    };
+        window.location.reload();
+      }, 3000);
+      setIsLoading(false);
+    }
+  };
 
-    return (
-        <Dialog open={open} onClose={handleClose} sx={{ fontFamily: "Arial" }}>
-            <DialogTitle sx={{ fontFamily: "Arial" }}>Cadastrar Tarefa</DialogTitle>
-            <DialogContent>
-                <TextField
-                    label="Título"
-                    fullWidth
-                    value={titulo}
-                    onChange={(e) => setTitulo(e.target.value)}
-                    margin="normal"
-                    sx={{ fontFamily: "Arial" }}
-                />
-                <TextField
-                    label="Descrição"
-                    fullWidth
-                    multiline
-                    rows={4}
-                    value={descricao}
-                    onChange={(e) => setDescricao(e.target.value)}
-                    margin="normal"
-                    sx={{ fontFamily: "Arial" }}
-                />
-                <TextField
-                    label="Prazo"
-                    fullWidth
-                    multiline
-                    rows={1}
-                    value={prazo}
-                    onChange={(e) => setPrazo(Number(e.target.value))}
-                    margin="normal"
-                    sx={{ fontFamily: "Arial" }}
-                />
-                <FormControl fullWidth margin="normal">
-                    <InputLabel id="prioridade-label">Prioridade</InputLabel>
-                    <Select
-                        labelId="prioridade-label"
-                        label="Prioridade"
-                        value={prioridade}
-                        onChange={(e) => setPrioridade(e.target.value as PrioridadeEnum)}
-                        sx={{ fontFamily: "Arial" }}
-                    >
-                        <MenuItem value={PrioridadeEnum.ALTA}>{PrioridadeEnum.ALTA}</MenuItem>
-                        <MenuItem value={PrioridadeEnum.MEDIA}>{PrioridadeEnum.MEDIA}</MenuItem>
-                        <MenuItem value={PrioridadeEnum.BAIXA}>{PrioridadeEnum.BAIXA}</MenuItem>
-                    </Select>
-                </FormControl>
-            </DialogContent>
-            <DialogActions>
-                <Button
-                    onClick={handleClose}
-                    color="error"
-                    startIcon={<Icon icon="mdi:cancel-bold" />}
-                >
-                    Cancelar
-                </Button>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                    startIcon={<Icon icon="mingcute:save-line" />}
-                >
-                    Salvar
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Adicionar Nova Tarefa</DialogTitle>
+      <DialogContent>
+        <TextField
+          autoFocus
+          margin="dense"
+          label="Título"
+          type="text"
+          fullWidth
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <TextField
+          margin="dense"
+          label="Descrição"
+          type="text"
+          fullWidth
+          multiline
+          rows={4}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <TextField
+          margin="dense"
+          label="Prioridade"
+          type="text"
+          fullWidth
+          select
+          value={priority}
+          onChange={(e) => setPriority(e.target.value)}
+          SelectProps={{ native: true }}
+        >
+          <option value="ALTA">Alta</option>
+          <option value="MEDIA">Média</option>
+          <option value="BAIXA">Baixa</option>
+        </TextField>
+        <TextField
+          margin="dense"
+          label="Tipo de Tarefa"
+          type="text"
+          fullWidth
+          select
+          value={taskType}
+          onChange={(e) => setTaskType(e.target.value)}
+          SelectProps={{ native: true }}
+        >
+          <option value={tipoTarefa.DATA}>Por Data</option>
+          <option value={tipoTarefa.DIAS}>Por Dias</option>
+          <option value={tipoTarefa.LIVRE}>Livre</option>
+        </TextField>
+        {taskType === tipoTarefa.DATA && (
+          <TextField
+            margin="dense"
+            label="Data de Término"
+            type="date"
+            fullWidth
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        )}
+        {taskType === tipoTarefa.DIAS && (
+          <TextField
+            margin="dense"
+            label="Dias para Completar"
+            type="number"
+            fullWidth
+            value={days}
+            onChange={(e) => setDays(e.target.value)}
+          />
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="primary">
+          Cancelar
+        </Button>
+        <Button onClick={handleSubmit} color="primary" disabled={isLoading}>
+          {isLoading ? "Salvando..." : "Salvar"}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
 export default TodoForm;
