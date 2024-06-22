@@ -6,9 +6,9 @@ import java.util.Arrays;
 
 @Getter
 public enum statusEnum {
-    TAREFA (1, "Tarefa"),
-    INICIALIZADA (2, "Inicializada"),
-    FINALIZADA (3, "Finalizada");
+    TAREFA (0, "Tarefa"),
+    INICIALIZADA (1, "Inicializada"),
+    FINALIZADA (2, "Finalizada");
 
     private int id;
     private String descricao;

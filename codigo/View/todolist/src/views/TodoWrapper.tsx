@@ -34,9 +34,10 @@ const Home = () => {
     setOpenEdit(true);
   };
 
-  const handleEditSubmit = async (formData: ITodo) => {
+  const handleEditSubmit = async (Data: ITodo) => {
+    debugger
     if (selectedTodo) {
-      await editTodo(selectedTodo.id, formData);
+      await editTodo(selectedTodo.id, Data);
       setOpenEdit(false);
       setSelectedTodo(null);
       const updatedTodos = await getTasks();
@@ -62,6 +63,7 @@ const Home = () => {
   };
 
   const handleCloseEdit = () => {
+    debugger
     setOpenEdit(false);
   };
 
@@ -123,7 +125,7 @@ const Home = () => {
         ))}
       </Grid>
       <TodoForm open={open} onClose={handleClose} onSubmit={handleSubmit} />
-      <EditTodo open={openEdit} onClose={handleCloseEdit} onSubmit={handleEditSubmit} card={selectedTodo} />
+      <EditTodo card={selectedTodo} open={openEdit} onClose={handleCloseEdit} />
     </Container>
   );
 };

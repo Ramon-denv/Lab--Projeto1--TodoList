@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import com.TodoList.tarefas.enums.prioridadeEnum;
 import com.TodoList.tarefas.enums.statusEnum;
+import com.TodoList.tarefas.enums.tipoEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDate;
@@ -60,6 +61,10 @@ public class Tarefa {
     @Column(name = "prioridade")
     @Enumerated(EnumType.ORDINAL)
     private prioridadeEnum prioridade;
+
+    @Column(name = "tipotask")
+    @Enumerated(EnumType.ORDINAL)
+    private tipoEnum tipoTask;
 
     public Tarefa(String titulo, String descricao, boolean completo, statusEnum status, boolean isTarefaLivre, int prazo, prioridadeEnum prioridade) {
         this.titulo = titulo;

@@ -27,7 +27,7 @@ public class TarefaService implements ITarefaService {
         } else if (tarefa.getPrazo() > 0) {
             tarefa.setData_fim(LocalDate.now().plusDays(tarefa.getPrazo()));
         } else {
-            if (validaDataFim(tarefa, result)) {
+            if (!validaDataFim(tarefa, result)) {
                 return null;
             }
         }
@@ -52,7 +52,7 @@ public class TarefaService implements ITarefaService {
         }else if(tarefa.getPrazo() > 0 ){
             tarefa.setData_fim(LocalDate.now().plusDays(tarefa.getPrazo()));
         }else {
-            if (validaDataFim(tarefa, result)){
+            if (!validaDataFim(tarefa, result)){
                 return null;
             }
         }
@@ -67,6 +67,7 @@ public class TarefaService implements ITarefaService {
                     tarefaToUpdate.setTarefaLivre(tarefa.isTarefaLivre());
                     tarefaToUpdate.setPrazo(tarefa.getPrazo());
                     tarefaToUpdate.setPrioridade(tarefa.getPrioridade());
+                    tarefaToUpdate.setTipoTask(tarefa.getTipoTask());
                     Tarefa updated = tarefaRepository.save(tarefaToUpdate);
                     return ResponseEntity.ok().body(updated);
                 }).orElse(ResponseEntity.ok().body(tarefaRepository.save(tarefa)));

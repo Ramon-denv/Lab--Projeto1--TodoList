@@ -52,24 +52,21 @@ const TodoList = ({ tasks, onEdit, onDelete }) => {
             sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1 }}
           >
             <Box sx={{ flexGrow: 1 }}>
-              <Typography variant="body2" fontWeight={500}>
+              <Typography variant="body2" fontWeight={100}>
                 {todo.titulo}
               </Typography>
-              <Typography variant="body2" fontWeight={500}>
+              <Typography variant="body2" fontWeight={100}>
                 {todo.prazo}
               </Typography>
-              <Typography variant="body2" fontWeight={500}>
+              <Typography variant="body2" fontWeight={100}>
                 {todo.prioridade}
               </Typography>
-              <Typography variant="body2" fontWeight={500}>
+              <Typography variant="body2" fontWeight={100}>
                 {todo.tipoTarefa === tipoTarefa.DIAS && (
-                  <span style={{ color: setColorDate(todo.dataFim) }}>
-                    {calculateDaysRemaining(todo.dataFim)} dias
+                  <span style={{ color: setColorDate(todo.data_fim) }}>
+                    {calculateDaysRemaining(todo.data_fim)} dias
                   </span>
                 )}
-              </Typography>
-              <Typography variant="body2" fontWeight={500}>
-                {todo.descricao}
               </Typography>
             </Box>
             <IconButton onClick={(e) => { e.stopPropagation(); onDelete(todo.id); }}>

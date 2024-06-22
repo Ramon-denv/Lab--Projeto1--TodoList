@@ -6,7 +6,7 @@ import { tipoTarefa } from '../enums/tipoTarefa.tsx';
 
 const TodoForm = ({ open, onClose, onSubmit }) => {
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [descricao, setDescription] = useState("");
   const [taskType, setTaskType] = useState(tipoTarefa.DATA);
   const [endDate, setEndDate] = useState("");
   const [days, setDays] = useState("");
@@ -27,19 +27,21 @@ const TodoForm = ({ open, onClose, onSubmit }) => {
   }, [open]);
 
   const handleSubmit = async () => {
+    debugger
     setIsLoading(true);
     try {
+      
       const data = {
         titulo: title,
-        description: description,
+        descricao: descricao,
         complete: false,
         createdAt: new Date().toISOString(),
-        dataFim: taskType === tipoTarefa.DATA ? endDate : null,
+        data_fim: taskType === tipoTarefa.DATA ? endDate : null,
         status: 0,
         taskLivre: taskType === tipoTarefa.LIVRE,
         prazo: taskType === tipoTarefa.DIAS ? parseInt(days) : null,
         prioridade: priority,
-        tipoTarefa: taskType,
+        tipoTask: taskType,
       };
 
       const response = await postTask(data);
@@ -80,7 +82,7 @@ const TodoForm = ({ open, onClose, onSubmit }) => {
           fullWidth
           multiline
           rows={4}
-          value={description}
+          value={descricao}
           onChange={(e) => setDescription(e.target.value)}
         />
         <TextField
@@ -89,13 +91,13 @@ const TodoForm = ({ open, onClose, onSubmit }) => {
           type="text"
           fullWidth
           select
-          value={priority}
           onChange={(e) => setPriority(e.target.value)}
           SelectProps={{ native: true }}
         >
-          <option value="ALTA">Alta</option>
-          <option value="MEDIA">Média</option>
-          <option value="BAIXA">Baixa</option>
+          <option value="">Selecione..</option>
+          <option value="ALTA">ALTA</option>
+          <option value="MEDIA">MEDIA</option>
+          <option value="BAIXA">BAIXA</option>
         </TextField>
         <TextField
           margin="dense"
@@ -103,10 +105,10 @@ const TodoForm = ({ open, onClose, onSubmit }) => {
           type="text"
           fullWidth
           select
-          value={taskType}
           onChange={(e) => setTaskType(e.target.value)}
           SelectProps={{ native: true }}
         >
+          <option value="">Selecione..</option>
           <option value={tipoTarefa.DATA}>Por Data</option>
           <option value={tipoTarefa.DIAS}>Por Dias</option>
           <option value={tipoTarefa.LIVRE}>Livre</option>
@@ -117,7 +119,6 @@ const TodoForm = ({ open, onClose, onSubmit }) => {
             label="Data de Término"
             type="date"
             fullWidth
-            value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
         )}

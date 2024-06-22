@@ -3,7 +3,7 @@ import { ITodo } from "./entities/todo";
 
 function setHttpServer(): AxiosInstance {
     return axios.create({
-        baseURL: "https://lab-projeto1-todolist.onrender.com",
+        baseURL: "http://localhost:8080",
     });
 }
 
@@ -21,7 +21,10 @@ export const getTasksByStatus = async (status: string): Promise<ITodo[]> => {
 export const postTask = async (
     task : any
 ): Promise<any> => {
+    debugger
+    console.log(task);
     const { data } = await setHttpServer().post(
+        
         `/tarefas/v1`, task
     );
     return data;
@@ -30,16 +33,17 @@ export const onAdvanceTask = async (
     id : number,
     status : number
 ): Promise<any> => {
+    debugger
     const { data } = await setHttpServer().put(
         `/tarefas/v1/status/${id}/${status}`);
     return data;
 }
 
-export const editTodo = async (id: number, formData: ITodo): Promise<void> => {
+export const editTodo = async (Data: ITodo): Promise<void> => {
     try {
         debugger
-        const url = `/tarefas/v1/${id}`;
-        const response = await setHttpServer().put(url, formData);
+        const url = `/tarefas/v1/${Data.id}`;
+        const response = await setHttpServer().put(url, Data);
         if (response.status === 200) {
             console.log("Tarefa atualizada com sucesso!");
             window.location.reload();

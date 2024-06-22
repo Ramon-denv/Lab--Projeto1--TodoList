@@ -110,7 +110,7 @@ public class TarefaController {
     public ResponseEntity<Object> deleteTarefaByIdv1(@PathVariable (value = "id") Long id) {
         return tarefa_servico.deleteTarefaById(id);
     }
-    @PatchMapping("/v1/status/{id}/{status}")
+    @PutMapping("/v1/status/{id}/{status}")
     public ResponseEntity<Tarefa> setStatus(@PathVariable long id,  @PathVariable int status){
         return tarefa_servico.setStatus(id, statusEnum.getStatusById(status));
     }

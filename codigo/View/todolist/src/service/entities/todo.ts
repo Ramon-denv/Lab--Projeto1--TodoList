@@ -1,15 +1,16 @@
+
 export interface ITodo {
     id: number;
     titulo: string;
     descricao: string;
     completo: boolean;
     createdAt : Date;
-    dataFim : Date;
+    data_fim : Date;
     prazo: number;
     tarefaLivre?: boolean;
     status : string;
     prioridade : string;
-    tipoTarefa : string;
+    tipoTask : string;
     taskLivre : boolean;
 }
 
